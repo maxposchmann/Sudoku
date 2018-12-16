@@ -36,8 +36,22 @@ std::vector<int> readInput(std::string a_filename, int a_siz)
 
 int main(int argc, char* argv[])
 {
+  int dim;
+  std::string filename;
+  if (argc > 1)
+  {
+    filename = argv[1];
+    if (argc > 2)
+    {
+      dim = atoi(argv[2]);
+    }
+    else
+    {
+      dim = 3;
+    }
+  }
+  else throw std::invalid_argument("Need input file");
   // define game dimension
-  int dim = 3;
   int len = pow(dim,2);
   int siz = pow(dim,4);
   // create the board
@@ -47,7 +61,7 @@ int main(int argc, char* argv[])
 
   // read input
   std::vector<int> gameInput(siz);
-  gameInput = readInput("gameMedium1",siz);
+  gameInput = readInput(filename,siz);
 
   board.initializeBoard(gameInput);
   board.printBoard();
