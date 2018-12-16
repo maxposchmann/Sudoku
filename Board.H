@@ -38,7 +38,8 @@ public:
   std::vector<bool> getCellNote(int a_k) {return m_cells[a_k].getNote();};
   /// get note length for cell
   int getCellNoteLength(int a_k) {return m_cells[a_k].getNoteLength();};
-
+  /// get number of cells set
+  int getNset() {return m_nSet;};
 
 
 private:

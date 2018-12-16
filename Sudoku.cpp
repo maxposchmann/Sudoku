@@ -78,10 +78,17 @@ int main(int argc, char* argv[])
           int val = board.getSoleNote(k);
           board.setCell(k,val);
           board.printBoard();
+          if (board.getNset() == siz)
+          {
+            printf("Solved!\n");
+            break;
+          }
         }
       }
     }
   }
+
+  // debug: print notes if flag set
   if (printNotes)
   {
     for (int k = 0; k < siz; k++)
