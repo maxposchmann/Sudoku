@@ -22,14 +22,17 @@ public:
   bool isSet() {return m_set;};
   /// get value
   int getVal() {return m_val;};
+  /// set item in note to false
+  void noteSetFalse(int a_val);
 
 
-  std::vector<bool> m_note;
+
 
 private:
   int m_val;
   bool m_set;
   int m_row, m_col, m_box;
   int m_noteLength;
+  std::vector<bool> m_note;
 };
 #endif

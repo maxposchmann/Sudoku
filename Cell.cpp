@@ -29,3 +29,9 @@ void Cell::set(const int a_val)
   m_val = a_val;
   m_set = true;
 };
+
+void Cell::noteSetFalse(int a_val)
+{
+  if (m_note[a_val]) m_noteLength--;
+  m_note[a_val] = false;
+}

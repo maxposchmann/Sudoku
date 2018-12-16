@@ -40,11 +40,11 @@ void Board::oneToTwo(int a_k, int* a_i, int* a_j)
   *a_j = a_k % m_len;
 }
 
-void Board::createNote(int a_i)
+void Board::createNote(int a_k)
 {
-  int row = m_cells[a_i].getRow();
-  int col = m_cells[a_i].getCol();
-  int box = m_cells[a_i].getBox();
+  int row = m_cells[a_k].getRow();
+  int col = m_cells[a_k].getCol();
+  int box = m_cells[a_k].getBox();
 
   int k;
   // scan row
@@ -54,7 +54,7 @@ void Board::createNote(int a_i)
     k = twoToOne(row,j);
     if (m_cells[k].isSet())
     {
-      m_cells[a_i].m_note[m_cells[k].getVal()] = false;
+      m_cells[a_k].noteSetFalse(m_cells[k].getVal());
     }
   }
 
@@ -65,7 +65,7 @@ void Board::createNote(int a_i)
     k = twoToOne(i,col);
     if (m_cells[k].isSet())
     {
-      m_cells[a_i].m_note[m_cells[k].getVal()] = false;
+      m_cells[a_k].noteSetFalse(m_cells[k].getVal());
     }
   }
 
@@ -78,7 +78,7 @@ void Board::createNote(int a_i)
       if ((i == row) && (j == col)) continue;
       if (m_cells[k].isSet())
       {
-        m_cells[a_i].m_note[m_cells[k].getVal()] = false;
+        m_cells[a_k].noteSetFalse(m_cells[k].getVal());
       }
       k++;
     }
