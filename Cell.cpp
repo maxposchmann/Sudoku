@@ -2,10 +2,10 @@
 
 Cell::Cell()
 {
-  m_row = 0;
-  m_col = 0;
-  m_box = 0;
-  m_val = 0;
+  m_row = -1;
+  m_col = -1;
+  m_box = -1;
+  m_val = -1;
   m_set = false;
 };
 
@@ -20,7 +20,7 @@ Cell::Cell(const int a_dim, const int a_row, const int a_col)
     m_note.push_back(true);
   }
   m_noteLength = pow(a_dim,2);
-  m_val = 0;
+  m_val = -1;
   m_set = false;
 }
 
