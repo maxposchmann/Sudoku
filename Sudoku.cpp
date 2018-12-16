@@ -36,11 +36,14 @@ std::vector<int> readInput(std::string a_filename, int a_siz)
 
 int main(int argc, char* argv[])
 {
+  // define game dimension
   int dim = 3;
   int len = pow(dim,2);
   int siz = pow(dim,4);
   // create the board
   Board board(dim);
+  // set debug (notes) flag
+  bool printNotes = false;
 
   // read input
   std::vector<int> gameInput(siz);
@@ -79,21 +82,24 @@ int main(int argc, char* argv[])
       }
     }
   }
-  for (int k = 0; k < siz; k++)
+  if (printNotes)
   {
-    if (board.isCellSet(k))
+    for (int k = 0; k < siz; k++)
     {
-      printf("Set to %i\n", board.getCellVal(k) + 1);
-    }
-    else
-    {
-      printf("Not set, options: ");
-      std::vector<bool> note = board.getCellNote(k);
-      for (int i = 0; i < len; i++)
+      if (board.isCellSet(k))
       {
-        if (note[i]) printf("%i ", i + 1);
+        printf("Set to %i\n", board.getCellVal(k) + 1);
       }
-      printf("\n");
+      else
+      {
+        printf("Not set, options: ");
+        std::vector<bool> note = board.getCellNote(k);
+        for (int i = 0; i < len; i++)
+        {
+          if (note[i]) printf("%i ", i + 1);
+        }
+        printf("\n");
+      }
     }
   }
 }
