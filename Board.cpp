@@ -70,19 +70,23 @@ int Board::createNote(int a_k)
   }
 
   // scan box
-  k = (m_len * m_dim * floor(box / m_dim)) + (box % m_dim);
+  k = (m_len * m_dim * floor(box / m_dim)) + (m_dim * (box % m_dim));
   for (int i = 0; i < m_dim; i++)
   {
     for (int j = 0; j < m_dim; j++)
     {
-      if ((i == row) && (j == col)) continue;
+      if ((i == row) && (j == col))
+      {
+        k++;
+        continue;
+      }
       if (m_cells[k].isSet())
       {
         m_cells[a_k].noteSetFalse(m_cells[k].getVal());
       }
       k++;
     }
-     k += (m_dim - 1) * m_len;
+     k += m_len - m_dim;
   }
   return m_cells[k].getNoteLength();
 }
@@ -160,19 +164,23 @@ void Board::setCell(int a_k, int a_val)
   }
 
   // scan box
-  k = (m_len * m_dim * floor(box / m_dim)) + (box % m_dim);
+  k = (m_len * m_dim * floor(box / m_dim)) + (m_dim * (box % m_dim));
   for (int i = 0; i < m_dim; i++)
   {
     for (int j = 0; j < m_dim; j++)
     {
-      if ((i == row) && (j == col)) continue;
+      if ((i == row) && (j == col))
+      {
+        k++;
+        continue;
+      }
       if (not(m_cells[k].isSet()))
       {
         m_cells[k].noteSetFalse(a_val);
       }
       k++;
     }
-     k += (m_dim - 1) * m_len;
+     k += m_len - m_dim;
   }
 }
 
