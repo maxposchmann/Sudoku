@@ -1,0 +1,5 @@
+# ignore .o, .d, .exe
+*.o
+*.d
+*.exe
+sudoku
