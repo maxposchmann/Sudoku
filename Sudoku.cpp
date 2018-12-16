@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
 
   // read input
   std::vector<int> gameInput(siz);
-  gameInput = readInput("game1",siz);
+  gameInput = readInput("gameMedium1",siz);
 
   board.initializeBoard(gameInput);
   board.printBoard();
