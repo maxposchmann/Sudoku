@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
   {
     if (not(board.isCellSet(k)))
     {
-      board.createNote(k);
+      int nl = board.createNote(k);
     }
 
   }

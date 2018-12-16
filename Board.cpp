@@ -40,7 +40,7 @@ void Board::oneToTwo(int a_k, int* a_i, int* a_j)
   *a_j = a_k % m_len;
 }
 
-void Board::createNote(int a_k)
+int Board::createNote(int a_k)
 {
   int row = m_cells[a_k].getRow();
   int col = m_cells[a_k].getCol();
@@ -84,6 +84,7 @@ void Board::createNote(int a_k)
     }
      k += (m_dim - 1) * m_len;
   }
+  return m_cells[k].getNoteLength();
 }
 
 void Board::printBoard()
@@ -125,4 +126,52 @@ void Board::printBoard()
     }
   }
   printf("\n\n");
+}
+
+void Board::setCell(int a_k, int a_val)
+{
+  m_cells[a_k].set(a_val);
+
+  int row = m_cells[a_k].getRow();
+  int col = m_cells[a_k].getCol();
+  int box = m_cells[a_k].getBox();
+
+  int k;
+  // scan row
+  for (int j = 0; j < m_len; j++)
+  {
+    if (j == col) continue;
+    k = twoToOne(row,j);
+    if (not(m_cells[k].isSet()))
+    {
+      m_cells[k].noteSetFalse(a_val);
+    }
+  }
+
+  // scan column
+  for (int i = 0; i < m_len; i++)
+  {
+    if (i == row) continue;
+    k = twoToOne(i,col);
+    if (not(m_cells[k].isSet()))
+    {
+      m_cells[k].noteSetFalse(a_val);
+    }
+  }
+
+  // scan box
+  k = (m_len * m_dim * floor(box / m_dim)) + (box % m_dim);
+  for (int i = 0; i < m_dim; i++)
+  {
+    for (int j = 0; j < m_dim; j++)
+    {
+      if ((i == row) && (j == col)) continue;
+      if (not(m_cells[k].isSet()))
+      {
+        m_cells[k].noteSetFalse(a_val);
+      }
+      k++;
+    }
+     k += (m_dim - 1) * m_len;
+  }
 }

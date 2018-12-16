@@ -22,6 +22,8 @@ public:
   bool isSet() {return m_set;};
   /// get value
   int getVal() {return m_val;};
+  /// get note length
+  int getNoteLength() {return m_noteLength;};
   /// set item in note to false
   void noteSetFalse(int a_val);
 
