@@ -9,7 +9,7 @@ std::vector<int> readInput(std::string a_filename, int a_siz)
   std::string line;
   char c;
   int k = 0;
-  std::vector<int> input(a_siz,0);
+  std::vector<int> input(a_siz,-1);
   if (file.is_open())
   {
     while (getline(file, line))
@@ -79,5 +79,21 @@ int main(int argc, char* argv[])
       }
     }
   }
-
+  for (int k = 0; k < siz; k++)
+  {
+    if (board.isCellSet(k))
+    {
+      printf("Set to %i\n", board.getCellVal(k) + 1);
+    }
+    else
+    {
+      printf("Not set, options: ");
+      std::vector<bool> note = board.getCellNote(k);
+      for (int i = 0; i < len; i++)
+      {
+        if (note[i]) printf("%i ", i + 1);
+      }
+      printf("\n");
+    }
+  }
 }
