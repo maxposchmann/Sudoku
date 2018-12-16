@@ -54,8 +54,13 @@ int main(int argc, char* argv[])
     if (not(board.isCellSet(k)))
     {
       int nl = board.createNote(k);
+      if (nl == 1)
+      {
+        int val = board.getSoleNote(k);
+        board.setCell(k,val);
+        board.printBoard();
+      }
     }
-
   }
 
 }

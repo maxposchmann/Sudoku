@@ -26,6 +26,8 @@ public:
   int getNoteLength() {return m_noteLength;};
   /// set item in note to false
   void noteSetFalse(int a_val);
+  /// get a single item (bool) from note
+  bool getNoteItem(int a_val) {return m_note[a_val];};
 
 
 

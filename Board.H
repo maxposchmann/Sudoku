@@ -3,6 +3,7 @@
 #include "Cell.H"
 #include <iostream>
 #include <cmath>
+#include <stdexcept>
 
 class Board
 {
@@ -29,6 +30,8 @@ public:
   bool isCellSet(int a_k) {return m_cells[a_k].isSet();};
   /// set cell in board and modify related notes
   void setCell(int a_k, int a_val);
+  /// when there is only one option in note, get its value
+  int getSoleNote(int a_k);
 
 
 

@@ -175,3 +175,15 @@ void Board::setCell(int a_k, int a_val)
      k += (m_dim - 1) * m_len;
   }
 }
+
+int Board::getSoleNote(int a_k)
+{
+  if (m_cells[a_k].getNoteLength() != 1) throw std::invalid_argument("Note length not 1");
+  else
+  {
+    for (int i = 0; i < m_len; i++)
+    {
+      if (m_cells[a_k].getNoteItem(i)) return i;
+    }
+  }
+}
