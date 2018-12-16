@@ -100,7 +100,7 @@ void Board::printBoard()
         {
           if (m_cells[k].isSet())
           {
-            printf("%i ", m_cells[k].getVal());
+            printf("%i ", m_cells[k].getVal() + 1);
           }
           else
           {

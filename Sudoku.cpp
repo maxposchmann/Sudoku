@@ -24,7 +24,7 @@ std::vector<int> readInput(std::string a_filename, int a_siz)
         }
         else if (std::isdigit(c))
         {
-          input[k] = (int)c  - '0';
+          input[k] = (int)c  - '1';
           k++;
         }
       }
@@ -59,6 +59,23 @@ int main(int argc, char* argv[])
         int val = board.getSoleNote(k);
         board.setCell(k,val);
         board.printBoard();
+      }
+    }
+  }
+  int maxIterations = 100;
+  for (int i = 0; i < maxIterations; i++)
+  {
+    for (int k = 0; k < siz; k++)
+    {
+      if (not(board.isCellSet(k)))
+      {
+        int nl = board.getCellNoteLength(k);
+        if (nl == 1)
+        {
+          int val = board.getSoleNote(k);
+          board.setCell(k,val);
+          board.printBoard();
+        }
       }
     }
   }
