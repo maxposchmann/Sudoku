@@ -28,6 +28,8 @@ public:
   void printBoard();
   /// check if cell is set
   bool isCellSet(int a_k) {return m_cells[a_k].isSet();};
+  /// get cell value
+  int getCellVal(int a_k) {return m_cells[a_k].getVal();};
   /// set cell in board and modify related notes
   void setCell(int a_k, int a_val);
   /// when there is only one option in note, get its value
