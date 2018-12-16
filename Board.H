@@ -44,5 +44,6 @@ public:
 private:
   int m_dim, m_len;
   std::vector<Cell> m_cells;
+  int m_nSet;
 };
 #endif
