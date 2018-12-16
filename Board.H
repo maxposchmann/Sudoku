@@ -22,9 +22,11 @@ public:
   /// convert 1 index to 2
   void oneToTwo(int a_k, int* a_i, int* a_j);
   /// create note for each cell
-  void createNote(int a_i);
+  void createNote(int a_k);
   /// print out the current board
   void printBoard();
+  /// check if cell is set
+  bool isCellSet(int a_k) {return m_cells[a_k].isSet();};
 
 
 

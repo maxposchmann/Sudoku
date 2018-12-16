@@ -49,4 +49,13 @@ int main(int argc, char* argv[])
   board.initializeBoard(gameInput);
   board.printBoard();
 
+  for (int k = 0; k < siz; k++)
+  {
+    if (not(board.isCellSet(k)))
+    {
+      board.createNote(k);
+    }
+
+  }
+
 }
