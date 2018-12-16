@@ -46,6 +46,8 @@ public:
   const int getCellCol(int a_k) const {return m_cells[a_k].getCol();};
   /// get box for cell
   const int getCellBox(int a_k) const {return m_cells[a_k].getBox();};
+  /// set a note value false for cell
+  void setCellNoteFalse(int a_k, int a_val) {m_cells[a_k].noteSetFalse(a_val);};
 
 
 private:
