@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
   std::ifstream file("game1");
   std::string line;
   char c;
-  int k = siz - len;
+  int k = 0;
   std::vector<int> gameInput(siz,0);
   if (file.is_open())
   {
@@ -36,13 +36,12 @@ int main(int argc, char* argv[])
           k++;
         }
       }
-      k -= 2 * len;
     }
     file.close();
     printf("\n\n\n");
   }
 
-  k = siz - len;
+  k = 0;
   for (int i = 0; i < dim; i++)
   {
     for (int j = 0; j < dim; j++)
@@ -63,7 +62,6 @@ int main(int argc, char* argv[])
         }
         if (m < (dim-1)) printf("| ");
       }
-      k -= 2 * len;
       printf("\n");
     }
     if (i < (dim-1))
