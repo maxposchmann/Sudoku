@@ -58,6 +58,9 @@ int main(int argc, char* argv[])
   Board board(dim);
   // set debug (notes) flag
   bool printNotes = false;
+  // set flags for strategies to use
+  bool strat1 = true;
+  bool strat2 = true;
 
   // read input
   std::vector<int> gameInput(siz);
@@ -66,6 +69,7 @@ int main(int argc, char* argv[])
   board.initializeBoard(gameInput);
   board.printBoard();
 
+  // setup initial set of notes for board
   for (int k = 0; k < siz; k++)
   {
     if (not(board.isCellSet(k)))
@@ -79,6 +83,10 @@ int main(int argc, char* argv[])
       }
     }
   }
+
+  // solving loop
+  // first strategy is to find cells with only one option in note
+  // second strategy is to find rows/columns/boxes with a value in only one cell's note
   int maxIterations = 100;
   for (int i = 0; i < maxIterations; i++)
   {
@@ -86,16 +94,111 @@ int main(int argc, char* argv[])
     {
       if (not(board.isCellSet(k)))
       {
-        int nl = board.getCellNoteLength(k);
-        if (nl == 1)
+        // first strategy
+        if (strat1)
         {
-          int val = board.getSoleNote(k);
-          board.setCell(k,val);
-          board.printBoard();
-          if (board.getNset() == siz)
+          int nl = board.getCellNoteLength(k);
+          if (nl == 1)
           {
-            printf("Solved!\n");
-            break;
+            int val = board.getSoleNote(k);
+            board.setCell(k,val);
+            board.printBoard();
+            if (board.getNset() == siz)
+            {
+              printf("Solved!\n");
+              break;
+            }
+            continue;
+          }
+        }
+
+        // second strategy
+        if (strat2)
+        {
+          std::vector<bool> note = board.getCellNote(k);
+          int row = board.getCellRow(k);
+          int col = board.getCellCol(k);
+          int box = board.getCellBox(k);
+          int z;
+
+          for (int noteIndex = 0; noteIndex < len; noteIndex++)
+          {
+            // only check possibilities for current cell
+            if (not(note[noteIndex])) continue;
+
+            // check row
+            bool isOnly = true;
+            for (int j = 0; j < len; j++)
+            {
+              z = board.twoToOne(row,j);
+              if (z == k) continue;
+              if (board.isCellSet(z)) continue;
+              if (board.getCellNote(z)[noteIndex]) isOnly = false;
+            }
+            // if it gets here with isOnly still true, that must be cell value
+            if (isOnly)
+            {
+              int val = noteIndex;
+              board.setCell(k,val);
+              board.printBoard();
+              if (board.getNset() == siz)
+              {
+                printf("Solved!\n");
+                break;
+              }
+              continue;
+            }
+
+            // check column
+            isOnly = true;
+            for (int j = 0; j < len; j++)
+            {
+              z = board.twoToOne(j,col);
+              if (z == k) continue;
+              if (board.isCellSet(z)) continue;
+              if (board.getCellNote(z)[noteIndex]) isOnly = false;
+            }
+            // if it gets here with isOnly still true, that must be cell value
+            if (isOnly)
+            {
+              int val = noteIndex;
+              board.setCell(k,val);
+              board.printBoard();
+              if (board.getNset() == siz)
+              {
+                printf("Solved!\n");
+                break;
+              }
+              continue;
+            }
+
+            // check box
+            isOnly = true;
+            z = (len * dim * floor(box / dim)) + (dim * (box % dim)) - 1;
+            for (int j = 0; j < dim; j++)
+            {
+              for (int jj = 0; jj < dim; jj++)
+              {
+                z++;
+                if (z == k) continue;
+                if (board.isCellSet(z)) continue;
+                if (board.getCellNote(z)[noteIndex]) isOnly = false;
+              }
+               z += len - dim;
+            }
+            // if it gets here with isOnly still true, that must be cell value
+            if (isOnly)
+            {
+              int val = noteIndex;
+              board.setCell(k,val);
+              board.printBoard();
+              if (board.getNset() == siz)
+              {
+                printf("Solved!\n");
+                break;
+              }
+              continue;
+            }
           }
         }
       }
