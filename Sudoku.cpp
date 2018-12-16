@@ -2,6 +2,7 @@
 #include "Cell.H"
 #include <fstream>
 #include <cctype>
+#include <algorithm>
 
 std::vector<int> readInput(std::string a_filename, int a_siz)
 {
@@ -57,12 +58,14 @@ int main(int argc, char* argv[])
   // create the board
   Board board(dim);
   // set debug (notes) flag
-  bool printNotes = false;
+  bool printNotes = true;
   // set flags for strategies to use
   // first strategy is to find cells with only one option in note
-  // second strategy is to find rows/columns/boxes with a value in only one cell's note
   bool strat1 = true;
+  // second strategy is to find rows/columns/boxes with a value in only one cell's note
   bool strat2 = true;
+  // third strategy is checking for notes of length n with only the same n items
+  bool strat3 = true;
 
   // read input
   std::vector<int> gameInput(siz);
@@ -87,17 +90,22 @@ int main(int argc, char* argv[])
   }
 
   // solving loop
-  int maxIterations = 100;
+  int z;
+  int maxIterations = 200;
   for (int i = 0; i < maxIterations; i++)
   {
     for (int k = 0; k < siz; k++)
     {
       if (not(board.isCellSet(k)))
       {
+        int nl = board.getCellNoteLength(k);
+        std::vector<bool> note = board.getCellNote(k);
+        int row = board.getCellRow(k);
+        int col = board.getCellCol(k);
+        int box = board.getCellBox(k);
         // first strategy
         if (strat1)
         {
-          int nl = board.getCellNoteLength(k);
           if (nl == 1)
           {
             int val = board.getSoleNote(k);
@@ -115,12 +123,6 @@ int main(int argc, char* argv[])
         // second strategy
         if (strat2)
         {
-          std::vector<bool> note = board.getCellNote(k);
-          int row = board.getCellRow(k);
-          int col = board.getCellCol(k);
-          int box = board.getCellBox(k);
-          int z;
-
           for (int noteIndex = 0; noteIndex < len; noteIndex++)
           {
             // only check possibilities for current cell
@@ -201,6 +203,113 @@ int main(int argc, char* argv[])
             }
           }
         }
+
+        // third strategy
+        if (strat3)
+        {
+          // check row
+          int nMatch = 1;
+          std::vector<int> matchList;
+          for (int j = 0; j < len; j++)
+          {
+            z = board.twoToOne(row,j);
+            if (z == k) continue;
+            if (board.isCellSet(z)) continue;
+            if (board.getCellNote(z) == note)
+            {
+              nMatch++;
+              matchList.push_back(z);
+            }
+          }
+          if (nMatch == nl)
+          {
+            for (int j = 0; j < len; j++)
+            {
+              z = board.twoToOne(row,j);
+              // skip cell in question
+              if (z == k) continue;
+              // skip also the cells it matched
+              if (std::find(matchList.begin(), matchList.end(), z) != matchList.end()) continue;
+              // modify notes for other cells in set
+              for (int jj = 0; jj < len; jj++)
+              {
+                if (note[jj]) board.setCellNoteFalse(z,jj);
+              }
+            }
+          }
+
+          // check column
+          nMatch = 1;
+          matchList.clear();
+          for (int j = 0; j < len; j++)
+          {
+            z = board.twoToOne(j,col);
+            if (z == k) continue;
+            if (board.isCellSet(z)) continue;
+            if (board.getCellNote(z) == note)
+            {
+              nMatch++;
+              matchList.push_back(z);
+            }
+          }
+          if (nMatch == nl)
+          {
+            for (int j = 0; j < len; j++)
+            {
+              z = board.twoToOne(j,col);
+              // skip cell in question
+              if (z == k) continue;
+              // skip also the cells it matched
+              if (std::find(matchList.begin(), matchList.end(), z) != matchList.end()) continue;
+              // modify notes for other cells in set
+              for (int jj = 0; jj < len; jj++)
+              {
+                if (note[jj]) board.setCellNoteFalse(z,jj);
+              }
+            }
+          }
+
+          // check box
+          nMatch = 1;
+          matchList.clear();
+          z = (len * dim * floor(box / dim)) + (dim * (box % dim)) - 1;
+          for (int j = 0; j < dim; j++)
+          {
+            for (int jj = 0; jj < dim; jj++)
+            {
+              z++;
+              if (z == k) continue;
+              if (board.isCellSet(z)) continue;
+              if (board.getCellNote(z) == note)
+              {
+                nMatch++;
+                matchList.push_back(z);
+              }
+            }
+            z += len - dim;
+          }
+          if (nMatch == nl)
+          {
+            z = (len * dim * floor(box / dim)) + (dim * (box % dim)) - 1;
+            for (int j = 0; j < dim; j++)
+            {
+              for (int jj = 0; jj < dim; jj++)
+              {
+                z++;
+                // skip cell in question
+                if (z == k) continue;
+                // skip also the cells it matched
+                if (std::find(matchList.begin(), matchList.end(), z) != matchList.end()) continue;
+                // modify notes for other cells in set
+                for (int jj = 0; jj < len; jj++)
+                {
+                  if (note[jj]) board.setCellNoteFalse(z,jj);
+                }
+              }
+              z += len - dim;
+            }
+          }
+        }
       }
     }
   }
@@ -212,11 +321,11 @@ int main(int argc, char* argv[])
     {
       if (board.isCellSet(k))
       {
-        printf("Set to %i\n", board.getCellVal(k) + 1);
+        printf("Cell %i: set to %i\n", k+1, board.getCellVal(k) + 1);
       }
       else
       {
-        printf("Not set, options: ");
+        printf("Cell %i: not set, options: ", k+1);
         std::vector<bool> note = board.getCellNote(k);
         for (int i = 0; i < len; i++)
         {
