@@ -84,9 +84,45 @@ void Board::createNote(int a_i)
     }
      k += (m_dim - 1) * m_len;
   }
+}
 
-
-
-
-
+void Board::printBoard()
+{
+  int k = 0;
+  for (int i = 0; i < m_dim; i++)
+  {
+    for (int j = 0; j < m_dim; j++)
+    {
+      for (int m = 0; m < m_dim; m++)
+      {
+        for (int n = 0; n < m_dim; n++)
+        {
+          if (m_cells[k].isSet())
+          {
+            printf("%i ", m_cells[k].getVal());
+          }
+          else
+          {
+            printf("_ ");
+          }
+          k++;
+        }
+        if (m < (m_dim-1)) printf("| ");
+      }
+      printf("\n");
+    }
+    if (i < (m_dim-1))
+    {
+      for (int p = 0; p < m_dim; p++)
+      {
+        for (int l = 0; l < (2 * m_dim); l++)
+        {
+          printf("-");
+        }
+        if (p < (m_dim-1)) printf("+-");
+      }
+      printf("\n");
+    }
+  }
+  printf("\n\n");
 }

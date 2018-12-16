@@ -12,7 +12,7 @@ public:
   /// constructor for nontrivial Board
   Board(const int a_dim);
   /// initializer for new game
-  void initializeBoard(std::vector<int>);
+  void initializeBoard(std::vector<int> a_input);
   /// get dimension
   const int getDim() const {return m_dim;};
   /// get length
@@ -21,8 +21,10 @@ public:
   int twoToOne(int a_i, int a_j);
   /// convert 1 index to 2
   void oneToTwo(int a_k, int* a_i, int* a_j);
-  /// create initial note for each cell
+  /// create note for each cell
   void createNote(int a_i);
+  /// print out the current board
+  void printBoard();
 
 
 
