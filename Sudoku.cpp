@@ -59,6 +59,8 @@ int main(int argc, char* argv[])
   // set debug (notes) flag
   bool printNotes = false;
   // set flags for strategies to use
+  // first strategy is to find cells with only one option in note
+  // second strategy is to find rows/columns/boxes with a value in only one cell's note
   bool strat1 = true;
   bool strat2 = true;
 
@@ -85,8 +87,6 @@ int main(int argc, char* argv[])
   }
 
   // solving loop
-  // first strategy is to find cells with only one option in note
-  // second strategy is to find rows/columns/boxes with a value in only one cell's note
   int maxIterations = 100;
   for (int i = 0; i < maxIterations; i++)
   {
