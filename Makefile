@@ -14,11 +14,11 @@ OBJS= Board.o Cell.o
 	$(CXX) -MM $(CFLAGS) $< > $*.d
 
 sudoku: $(OBJS) Sudoku.o  Makefile
-	$(CXX) $(CFLAGS) -o sudoku.exe $(OBJS) Sudoku.o
+	$(CXX) $(CFLAGS) -o sudoku $(OBJS) Sudoku.o
 
 #Rule named clean - gets rid of all remnants of the compile.
 clean:
-	rm *.o *.d *.exe
+	rm *.o *.d sudoku
 
 # dependency info for *existing* .o files
 -include $(OBJS:.o=.d)
