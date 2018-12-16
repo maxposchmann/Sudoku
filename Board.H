@@ -40,6 +40,12 @@ public:
   int getCellNoteLength(int a_k) {return m_cells[a_k].getNoteLength();};
   /// get number of cells set
   int getNset() {return m_nSet;};
+  /// get row for cell
+  const int getCellRow(int a_k) const {return m_cells[a_k].getRow();};
+  /// get column for cell
+  const int getCellCol(int a_k) const {return m_cells[a_k].getCol();};
+  /// get box for cell
+  const int getCellBox(int a_k) const {return m_cells[a_k].getBox();};
 
 
 private:
