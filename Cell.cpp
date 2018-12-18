@@ -28,6 +28,8 @@ void Cell::set(const int a_val)
 {
   m_val = a_val;
   m_set = true;
+  m_note.clear();
+  m_noteLength = 0;
 };
 
 void Cell::noteSetFalse(int a_val)
