@@ -62,10 +62,16 @@ int main(int argc, char* argv[])
   // set flags for strategies to use
   // first strategy is to find cells with only one option in note
   bool strat1 = true;
+  int  strat1threshold = 0;
   // second strategy is to find rows/columns/boxes with a value in only one cell's note
   bool strat2 = true;
+  int  strat2threshold = 0;
   // third strategy is checking for notes of length n with only the same n items
   bool strat3 = true;
+  int  strat3threshold = 0;
+  // fourth strategy is to reduce notes by using cells that are in same row and box or column and box
+  bool strat4 = true;
+  int  strat4threshold = 0;
 
   // read input
   std::vector<int> gameInput(siz);
@@ -91,7 +97,7 @@ int main(int argc, char* argv[])
 
   // solving loop
   int z;
-  int maxIterations = 200;
+  int maxIterations = 50;
   for (int i = 0; i < maxIterations; i++)
   {
     for (int k = 0; k < siz; k++)
@@ -104,7 +110,7 @@ int main(int argc, char* argv[])
         int col = board.getCellCol(k);
         int box = board.getCellBox(k);
         // first strategy
-        if (strat1)
+        if (strat1 && (i >= strat1threshold))
         {
           if (nl == 1)
           {
@@ -113,7 +119,7 @@ int main(int argc, char* argv[])
             board.printBoard();
             if (board.getNset() == siz)
             {
-              printf("Solved!\n");
+              printf("Solved in %i loops!\n", i);
               break;
             }
             continue;
@@ -121,7 +127,7 @@ int main(int argc, char* argv[])
         }
 
         // second strategy
-        if (strat2)
+        if (strat2 && (i >= strat2threshold))
         {
           for (int noteIndex = 0; noteIndex < len; noteIndex++)
           {
@@ -145,7 +151,7 @@ int main(int argc, char* argv[])
               board.printBoard();
               if (board.getNset() == siz)
               {
-                printf("Solved!\n");
+                printf("Solved in %i loops!\n", i);
                 break;
               }
               continue;
@@ -205,7 +211,7 @@ int main(int argc, char* argv[])
         }
 
         // third strategy
-        if (strat3)
+        if (strat3 && (i >= strat3threshold))
         {
           // check row
           int nMatch = 1;
@@ -307,6 +313,180 @@ int main(int argc, char* argv[])
                 }
               }
               z += len - dim;
+            }
+          }
+        }
+
+        // fourth strategy
+        if (strat4 && (i >= strat4threshold))
+        {
+          // check row and box
+          for (int j = 0; j < len; j++)
+          {
+            z = board.twoToOne(row,j);
+            // check conditions to skip this compare
+            if (z == k) continue;
+            if (not(board.getCellBox(z) == box)) continue;
+            if (board.isCellSet(z)) continue;
+
+            for (int noteIndex = 0; noteIndex < len; noteIndex++)
+            {
+              if (not(note[noteIndex])) continue;
+              if (not(board.getCellNote(z)[noteIndex])) continue;
+              bool isOnly = true;
+              // if item is on both notes, check if it is on other notes in row
+              for (int colIndex = 0; colIndex < len; colIndex++)
+              {
+                int y = board.twoToOne(row , colIndex);
+                // skip if cell y is set
+                if (board.isCellSet(y)) continue;
+                // skip if this cell is same as one of pair already considered
+                if ((y == k) || (y == z)) continue;
+                // skip if value not in note
+                if (not(board.getCellNote(y)[noteIndex])) continue;
+                // if it gets this far, then the pair isn't unique
+                isOnly = false;
+                break;
+              }
+              // if isOnly is true, then remove this item from notes in box
+              if (isOnly)
+              {
+                int y = (len * dim * floor(box / dim)) + (dim * (box % dim)) - 1;
+                for (int boxIndex1 = 0; boxIndex1 < dim; boxIndex1++)
+                {
+                  for (int boxIndex2 = 0; boxIndex2 < dim; boxIndex2++)
+                  {
+                    y++;
+                    // skip if cell y is set
+                    if (board.isCellSet(y)) continue;
+                    // skip cells in question
+                    if ((y == k) || (y == z)) continue;
+                    // modify notes for other cells in set
+                    board.setCellNoteFalse(y,noteIndex);
+                  }
+                  y += len - dim;
+                }
+              }
+
+              // now flip it and check if unique in box
+              isOnly = true;
+              int y = (len * dim * floor(box / dim)) + (dim * (box % dim)) - 1;
+              for (int boxIndex1 = 0; boxIndex1 < dim; boxIndex1++)
+              {
+                for (int boxIndex2 = 0; boxIndex2 < dim; boxIndex2++)
+                {
+                  y++;
+                  // skip if cell y is set
+                  if (board.isCellSet(y)) continue;
+                  // skip cells in question
+                  if ((y == k) || (y == z)) continue;
+                  // skip if value not in note
+                  if (not(board.getCellNote(y)[noteIndex])) continue;
+                  // if it gets this far, then the pair isn't unique
+                  isOnly = false;
+                  break;
+                }
+                y += len - dim;
+              }
+              // if isOnly is true, then remove this item from notes in row
+              if (isOnly)
+              {
+                for (int colIndex = 0; colIndex < len; colIndex++)
+                {
+                  int y = board.twoToOne(row,colIndex);
+                  // skip if cell y is set
+                  if (board.isCellSet(y)) continue;
+                  // skip cells in question
+                  if ((y == k) || (y == z)) continue;
+                  // modify notes for other cells in set
+                  board.setCellNoteFalse(y,noteIndex);
+                }
+              }
+            }
+          }
+
+          // check column and box
+          for (int j = 0; j < len; j++)
+          {
+            z = board.twoToOne(j,col);
+            // check conditions to skip this compare
+            if (z == k) continue;
+            if (not(board.getCellBox(z) == box)) continue;
+            if (board.isCellSet(z)) continue;
+
+            for (int noteIndex = 0; noteIndex < len; noteIndex++)
+            {
+              if (not(note[noteIndex])) continue;
+              if (not(board.getCellNote(z)[noteIndex])) continue;
+              bool isOnly = true;
+              // if item is on both notes, check if it is on other notes in column
+              for (int rowIndex = 0; rowIndex < len; rowIndex++)
+              {
+                int y = board.twoToOne(rowIndex,col);
+                // skip if cell y is set
+                if (board.isCellSet(y)) continue;
+                // skip if this cell is same as one of pair already considered
+                if ((y == k) || (y == z)) continue;
+                // skip if value not in note
+                if (not(board.getCellNote(y)[noteIndex])) continue;
+                // if it gets this far, then the pair isn't unique
+                isOnly = false;
+                break;
+              }
+              // if isOnly is true, then remove this item from notes in box
+              if (isOnly)
+              {
+                int y = (len * dim * floor(box / dim)) + (dim * (box % dim)) - 1;
+                for (int boxIndex1 = 0; boxIndex1 < dim; boxIndex1++)
+                {
+                  for (int boxIndex2 = 0; boxIndex2 < dim; boxIndex2++)
+                  {
+                    y++;
+                    // skip if cell y is set
+                    if (board.isCellSet(y)) continue;
+                    // skip cells in question
+                    if ((y == k) || (y == z)) continue;
+                    // modify notes for other cells in set
+                    board.setCellNoteFalse(y,noteIndex);
+                  }
+                  y += len - dim;
+                }
+              }
+              
+              // now flip it and check if unique in box
+              isOnly = true;
+              int y = (len * dim * floor(box / dim)) + (dim * (box % dim)) - 1;
+              for (int boxIndex1 = 0; boxIndex1 < dim; boxIndex1++)
+              {
+                for (int boxIndex2 = 0; boxIndex2 < dim; boxIndex2++)
+                {
+                  y++;
+                  // skip if cell y is set
+                  if (board.isCellSet(y)) continue;
+                  // skip cells in question
+                  if ((y == k) || (y == z)) continue;
+                  // skip if value not in note
+                  if (not(board.getCellNote(y)[noteIndex])) continue;
+                  // if it gets this far, then the pair isn't unique
+                  isOnly = false;
+                  break;
+                }
+                y += len - dim;
+              }
+              // if isOnly is true, then remove this item from notes in column
+              if (isOnly)
+              {
+                for (int rowIndex = 0; rowIndex < len; rowIndex++)
+                {
+                  int y = board.twoToOne(rowIndex,col);
+                  // skip if cell y is set
+                  if (board.isCellSet(y)) continue;
+                  // skip cells in question
+                  if ((y == k) || (y == z)) continue;
+                  // modify notes for other cells in set
+                  board.setCellNoteFalse(y,noteIndex);
+                }
+              }
             }
           }
         }
