@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
             board.printBoard();
             if (board.getNset() == siz)
             {
-              printf("Solved in %i loops!\n", i);
+              printf("Solved in %i loops!\n", i + 1);
               break;
             }
             continue;
@@ -151,7 +151,7 @@ int main(int argc, char* argv[])
               board.printBoard();
               if (board.getNset() == siz)
               {
-                printf("Solved in %i loops!\n", i);
+                printf("Solved in %i loops!\n", i + 1);
                 break;
               }
               continue;
@@ -452,7 +452,7 @@ int main(int argc, char* argv[])
                   y += len - dim;
                 }
               }
-              
+
               // now flip it and check if unique in box
               isOnly = true;
               int y = (len * dim * floor(box / dim)) + (dim * (box % dim)) - 1;
