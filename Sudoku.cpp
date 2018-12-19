@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 
   // solving loop
   int z;
-  int maxIterations = 50;
+  int maxIterations = 100;
   for (int i = 0; i < maxIterations; i++)
   {
     for (int k = 0; k < siz; k++)
@@ -142,7 +142,6 @@ int main(int argc, char* argv[])
               if (z == k) continue;
               if (board.isCellSet(z)) continue;
               if (board.getCellNote(z)[noteIndex]) isOnly = false;
-              break;
             }
             // if it gets here with isOnly still true, that must be cell value
             if (isOnly)
@@ -166,7 +165,6 @@ int main(int argc, char* argv[])
               if (z == k) continue;
               if (board.isCellSet(z)) continue;
               if (board.getCellNote(z)[noteIndex]) isOnly = false;
-              break;
             }
             // if it gets here with isOnly still true, that must be cell value
             if (isOnly)
@@ -193,7 +191,6 @@ int main(int argc, char* argv[])
                 if (z == k) continue;
                 if (board.isCellSet(z)) continue;
                 if (board.getCellNote(z)[noteIndex]) isOnly = false;
-                break;
               }
                z += len - dim;
             }
@@ -387,7 +384,6 @@ int main(int argc, char* argv[])
                   if (not(board.getCellNote(y)[noteIndex])) continue;
                   // if it gets this far, then the pair isn't unique
                   isOnly = false;
-                  break;
                 }
                 y += len - dim;
               }
@@ -472,7 +468,6 @@ int main(int argc, char* argv[])
                   if (not(board.getCellNote(y)[noteIndex])) continue;
                   // if it gets this far, then the pair isn't unique
                   isOnly = false;
-                  break;
                 }
                 y += len - dim;
               }
