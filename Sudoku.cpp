@@ -142,6 +142,7 @@ int main(int argc, char* argv[])
               if (z == k) continue;
               if (board.isCellSet(z)) continue;
               if (board.getCellNote(z)[noteIndex]) isOnly = false;
+              break;
             }
             // if it gets here with isOnly still true, that must be cell value
             if (isOnly)
@@ -165,6 +166,7 @@ int main(int argc, char* argv[])
               if (z == k) continue;
               if (board.isCellSet(z)) continue;
               if (board.getCellNote(z)[noteIndex]) isOnly = false;
+              break;
             }
             // if it gets here with isOnly still true, that must be cell value
             if (isOnly)
@@ -174,7 +176,7 @@ int main(int argc, char* argv[])
               board.printBoard();
               if (board.getNset() == siz)
               {
-                printf("Solved!\n");
+                printf("Solved in %i loops!\n", i + 1);
                 break;
               }
               continue;
@@ -191,6 +193,7 @@ int main(int argc, char* argv[])
                 if (z == k) continue;
                 if (board.isCellSet(z)) continue;
                 if (board.getCellNote(z)[noteIndex]) isOnly = false;
+                break;
               }
                z += len - dim;
             }
@@ -202,7 +205,7 @@ int main(int argc, char* argv[])
               board.printBoard();
               if (board.getNset() == siz)
               {
-                printf("Solved!\n");
+                printf("Solved in %i loops!\n", i + 1);
                 break;
               }
               continue;
