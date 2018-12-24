@@ -199,3 +199,13 @@ int Board::getSoleNote(int a_k)
     }
   }
 }
+
+int Board::getNset()
+{
+  int nSet = 0;
+  for (int i = 0; i < pow(m_len,2); i++)
+  {
+    if (isCellSet(i)) nSet++;
+  }
+  return nSet;
+};

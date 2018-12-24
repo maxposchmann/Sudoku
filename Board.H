@@ -39,7 +39,8 @@ public:
   /// get note length for cell
   int getCellNoteLength(int a_k) {return m_cells[a_k].getNoteLength();};
   /// get number of cells set
-  int getNset() {return m_nSet;};
+  //int getNset() {return m_nSet;};
+  int getNset();
   /// get row for cell
   const int getCellRow(int a_k) const {return m_cells[a_k].getRow();};
   /// get column for cell
