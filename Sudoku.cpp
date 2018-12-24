@@ -100,6 +100,7 @@ int main(int argc, char* argv[])
   int maxIterations = 100;
   for (int i = 0; i < maxIterations; i++)
   {
+    bool updated = false;
     for (int k = 0; k < siz; k++)
     {
       if (not(board.isCellSet(k)))
@@ -116,6 +117,7 @@ int main(int argc, char* argv[])
           {
             int val = board.getSoleNote(k);
             board.setCell(k,val);
+            updated = true;
             board.printBoard();
             if (board.getNset() == siz)
             {
@@ -148,6 +150,7 @@ int main(int argc, char* argv[])
             {
               int val = noteIndex;
               board.setCell(k,val);
+              updated = true;
               board.printBoard();
               if (board.getNset() == siz)
               {
@@ -239,7 +242,11 @@ int main(int argc, char* argv[])
               // modify notes for other cells in set
               for (int jj = 0; jj < len; jj++)
               {
-                if (note[jj]) board.setCellNoteFalse(z,jj);
+                if (note[jj] && board.getCellNote(z)[jj])
+                {
+                  board.setCellNoteFalse(z,jj);
+                  updated = true;
+                }
               }
             }
           }
@@ -270,7 +277,11 @@ int main(int argc, char* argv[])
               // modify notes for other cells in set
               for (int jj = 0; jj < len; jj++)
               {
-                if (note[jj]) board.setCellNoteFalse(z,jj);
+                if (note[jj] && board.getCellNote(z)[jj])
+                {
+                  board.setCellNoteFalse(z,jj);
+                  updated = true;
+                }
               }
             }
           }
@@ -309,7 +320,11 @@ int main(int argc, char* argv[])
                 // modify notes for other cells in set
                 for (int jj = 0; jj < len; jj++)
                 {
-                  if (note[jj]) board.setCellNoteFalse(z,jj);
+                  if (note[jj] && board.getCellNote(z)[jj])
+                  {
+                    board.setCellNoteFalse(z,jj);
+                    updated = true;
+                  };
                 }
               }
               z += len - dim;
@@ -355,6 +370,7 @@ int main(int argc, char* argv[])
                   if ((board.getCellRow(z) == row)) continue;
                   // modify notes for other cells in set
                   board.setCellNoteFalse(z,noteIndex);
+                  updated = true;
                 }
                 z += len - dim;
               }
@@ -391,6 +407,7 @@ int main(int argc, char* argv[])
                 if ((board.getCellBox(z) == box)) continue;
                 // modify notes for other cells in set
                 board.setCellNoteFalse(z,noteIndex);
+                updated = true;
               }
             }
 
@@ -425,6 +442,7 @@ int main(int argc, char* argv[])
                   if ((board.getCellCol(z) == col)) continue;
                   // modify notes for other cells in set
                   board.setCellNoteFalse(z,noteIndex);
+                  updated = true;
                 }
                 z += len - dim;
               }
@@ -461,11 +479,17 @@ int main(int argc, char* argv[])
                 if ((board.getCellBox(z) == box)) continue;
                 // modify notes for other cells in set
                 board.setCellNoteFalse(z,noteIndex);
+                updated = true;
               }
             }
           }
         }
       }
+    }
+    if (not(updated))
+    {
+      printf("Game stalled after %i loops\n\n", i + 1);
+      break;
     }
   }
 
