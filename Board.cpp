@@ -11,7 +11,6 @@ Board::Board(const int a_dim)
       m_cells.push_back(Cell(m_dim, i, j));
     }
   }
-  m_nSet = 0;
 }
 
 void Board::initializeBoard(std::vector<int> a_input)
@@ -24,7 +23,6 @@ void Board::initializeBoard(std::vector<int> a_input)
       if (a_input[k] >= 0)
       {
         m_cells[k].set(a_input[k]);
-        m_nSet++;
       }
     }
   }
@@ -95,7 +93,7 @@ int Board::createNote(int a_k)
 
 void Board::printBoard()
 {
-  printf("%i cells set\n",m_nSet);
+  printf("%i cells set\n",getNset());
   int k = 0;
   for (int i = 0; i < m_dim; i++)
   {
@@ -138,7 +136,6 @@ void Board::printBoard()
 void Board::setCell(int a_k, int a_val)
 {
   m_cells[a_k].set(a_val);
-  m_nSet++;
 
   int row = m_cells[a_k].getRow();
   int col = m_cells[a_k].getCol();
@@ -199,3 +196,13 @@ int Board::getSoleNote(int a_k)
     }
   }
 }
+
+int Board::getNset()
+{
+  int nSet = 0;
+  for (int i = 0; i < pow(m_len,2); i++)
+  {
+    if (isCellSet(i)) nSet++;
+  }
+  return nSet;
+};
