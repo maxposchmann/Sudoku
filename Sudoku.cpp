@@ -368,6 +368,8 @@ int main(int argc, char* argv[])
                   if (board.isCellSet(z)) continue;
                   // skip row in question
                   if ((board.getCellRow(z) == row)) continue;
+                  //skip if not in note for z
+                  if (not(board.getCellNote(z)[noteIndex])) continue;
                   // modify notes for other cells in set
                   board.setCellNoteFalse(z,noteIndex);
                   updated = true;
@@ -405,6 +407,8 @@ int main(int argc, char* argv[])
                 if (board.isCellSet(z)) continue;
                 // if in same box, skip
                 if ((board.getCellBox(z) == box)) continue;
+                //skip if not in note for z
+                if (not(board.getCellNote(z)[noteIndex])) continue;
                 // modify notes for other cells in set
                 board.setCellNoteFalse(z,noteIndex);
                 updated = true;
@@ -440,6 +444,8 @@ int main(int argc, char* argv[])
                   if (board.isCellSet(z)) continue;
                   // skip row in question
                   if ((board.getCellCol(z) == col)) continue;
+                  //skip if not in note for z
+                  if (not(board.getCellNote(z)[noteIndex])) continue;
                   // modify notes for other cells in set
                   board.setCellNoteFalse(z,noteIndex);
                   updated = true;
@@ -477,6 +483,8 @@ int main(int argc, char* argv[])
                 if (board.isCellSet(z)) continue;
                 // if in same box, skip
                 if ((board.getCellBox(z) == box)) continue;
+                //skip if not in note for z
+                if (not(board.getCellNote(z)[noteIndex])) continue;
                 // modify notes for other cells in set
                 board.setCellNoteFalse(z,noteIndex);
                 updated = true;
