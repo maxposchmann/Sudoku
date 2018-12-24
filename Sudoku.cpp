@@ -513,10 +513,10 @@ int main(int argc, char* argv[])
       for (int kSpec = 0; kSpec < siz; kSpec++)
       {
         if (saveBoard.isCellSet(kSpec)) continue;
-        std::vector<bool> note = saveBoard.getCellNote(kSpec);
         int noteLength = saveBoard.getCellNoteLength(kSpec);
         // only start speculaton on cells with just 2 options - for reasons
         if (noteLength > 2) continue;
+        std::vector<bool> note = saveBoard.getCellNote(kSpec);
         for (int iOption = 0; iOption < len; iOption++)
         {
           // set to last known option
@@ -524,7 +524,7 @@ int main(int argc, char* argv[])
           // skip if not an option
           if (not(note[iOption])) continue;
           specBoard.setCell(kSpec,iOption);
-          printf("TRYING:\n");
+          printf("Trying %i in cell %i:\n", iOption + 1, kSpec + 1);
           specBoard.printBoard();
 
           // now go back into a solve loop
@@ -930,27 +930,34 @@ int main(int argc, char* argv[])
             }
             if (not(updated))
             {
-              printf("Game stalled after %i loops\n\n", i + 1);
+              printf("Game stalled after %i loops in speculation mode\n\n", i + 1);
               break;
             }
           }
 
           // check if some cell has no possibilities
-          bool check = true;
+          bool check = false;
           for (int iCheck = 0; iCheck < siz; iCheck++)
           {
+            if (specBoard.isCellSet(iCheck)) continue;
             if (specBoard.getCellNoteLength(iCheck) == 0)
             {
               // reset to last possibility
-              specBoard = saveBoard;
-              check = false;
+              check = true;
+              printf("Rejecting %i in cell %i:\n", iOption + 1, kSpec + 1);
               break;
             }
           }
-          // if this works but didn't solve the problem, save it
+          // if this option was impossible, set cell to other option
           if (check)
           {
-            saveBoard = specBoard;
+            // remove this possibility
+            saveBoard.setCellNoteFalse(kSpec, iOption);
+            // set to remaining (already required only 2 options to speculate)
+            int remainOption = saveBoard.getSoleNote(kSpec);
+            saveBoard.setCell(kSpec, remainOption);
+            printf("Setting cell %i to %i because %i was rejected\n", kSpec + 1, remainOption + 1, iOption + 1);
+            saveBoard.printBoard();
             // break the option loop
             break;
           }
