@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
   // create the board
   Board board(dim);
   // set debug (notes) flag
-  bool printNotes = true;
+  bool printNotes = false;
   // set flags for strategies to use
   // first strategy is to find cells with only one option in note
   bool strat1 = true;
