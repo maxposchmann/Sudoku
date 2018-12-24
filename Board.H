@@ -39,7 +39,6 @@ public:
   /// get note length for cell
   int getCellNoteLength(int a_k) {return m_cells[a_k].getNoteLength();};
   /// get number of cells set
-  //int getNset() {return m_nSet;};
   int getNset();
   /// get row for cell
   const int getCellRow(int a_k) const {return m_cells[a_k].getRow();};
@@ -54,6 +53,5 @@ public:
 private:
   int m_dim, m_len;
   std::vector<Cell> m_cells;
-  int m_nSet;
 };
 #endif
